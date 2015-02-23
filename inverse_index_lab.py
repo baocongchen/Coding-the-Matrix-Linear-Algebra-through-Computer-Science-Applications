@@ -13,9 +13,9 @@ def movie_review(name):
     Input: the name of a movie
     Output: a string (one of the review options), selected at random using randint
     """
-    return ...
-
-
+    from random import randint
+    return ["excellent","great","good","so so", "bad"][randint(0,4)]
+    
 
 ## 2: (Task 2) Make Inverse Index
 def makeInverseIndex(strlist):
@@ -32,7 +32,26 @@ def makeInverseIndex(strlist):
     >>> makeInverseIndex(['hello world','hello','hello cat','hellolot of cats']) == {'hello': {0, 1, 2}, 'cat': {2}, 'of': {3}, 'world': {0}, 'cats': {3}, 'hellolot': {3}}
     True
     """
-    pass
+    keys = []
+    values = []
+
+    for x in strlist:
+        tmp = x.split() 
+        keys += tmp
+    keys = list(set(keys))
+
+    for i in keys:    
+        value = []
+        for n in range(len(strlist)):
+            for e in strlist[n].split(' '):
+                if e == i:
+                    value.append(n)        
+        values.append({x for x in value})
+    mydict = {}
+
+    for i in range(len(keys)):
+        mydict[keys[i]]=values[i]
+    return mydict
 
 
 
@@ -49,7 +68,7 @@ def orSearch(inverseIndex, query):
     >>> orSearch(idx, ['Johann', 'Carl'])
     {0, 2, 3, 4, 5}
     """
-    pass
+    return {j for i in query for j in inverseIndex[i]}
 
 
 
@@ -66,5 +85,15 @@ def andSearch(inverseIndex, query):
     >>> andSearch(idx, ['Johann', 'Bach'])
     {0, 4}
     """
-    pass
+    store = []
+    select = []
+    tmp = [i for i in query]
+    for key in tmp:
+        for value in inverseIndex[key]:
+            store.append(value)
+    for things in store:
+        if store.count(things) == len(query):
+            select.append(things)
+    select = list(set(select))
+    return {x for x in select}
 
